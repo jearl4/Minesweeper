@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -113,12 +114,18 @@ public class Minesweeper implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource().equals(reset)) {
 			// reset the mine field
+
 		} else {
 			for (int x = 0; x < buttons.length; x++) {
 				for (int y = 0; y < buttons.length; y++) {
 					if (event.getSource() == buttons[x][y]) {
-						buttons[x][y].setText(counts[x][y] + "");
-						buttons[x][y].setEnabled(false);
+						if (counts[x][y] == MINE) {
+							buttons[x][y].setForeground(Color.RED);
+							buttons[x][y].setText("\u00D7");	//  unicode character to represent mine
+						} else {
+							buttons[x][y].setText(counts[x][y] + "");
+							buttons[x][y].setEnabled(false);
+						}
 					}
 				}
 			}

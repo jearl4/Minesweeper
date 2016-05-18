@@ -14,10 +14,10 @@ public class Minesweeper implements ActionListener {
 	JButton[][] buttons = new JButton[20][20]; // display of mine field grid
 	int[][] counts = new int[20][20]; // will hold the data for the squares
 	Container grid = new Container();
-	final int MINE = 0; // holds value of mine location
+	final int MINE = 10; // holds value of mine location
 
 	public Minesweeper() {
-		frame.setSize(500, 500);
+		frame.setSize(1000, 800);
 		frame.setLayout(new BorderLayout());
 		frame.add(reset, BorderLayout.SOUTH); // position the reset button
 		reset.addActionListener(this); // listen for click
@@ -32,7 +32,7 @@ public class Minesweeper implements ActionListener {
 			}
 		}
 		frame.add(grid, BorderLayout.CENTER);
-
+		createRandomMines(30);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
@@ -69,47 +69,60 @@ public class Minesweeper implements ActionListener {
 		// check all neighbors for land mines and assign values
 		for (int x = 0; x < counts.length; x++) {
 			for (int y = 0; y < counts.length; y++) {
-				int neighborCount = 0;
-				// top left tile
-				if (x > 0 && y > 0 && counts[x - 1][y - 1] == MINE) {
-					neighborCount++;
-				}
-				// top center
-				if (y > 0 && counts[x][y - 1] == MINE) {
-					neighborCount++;
-				}
-				// top right
-				if (x > 0 && y > 0 && counts[x + 1][y - 1] == MINE) {
-					neighborCount++;
-				}
-				// center left
-				if (x > 0 && counts[x - 1][y] == MINE) {
-					neighborCount++;
-				}
-				// center right
-				if (x > 0 && counts[x + 1][y] == MINE) {
-					neighborCount++;
-				}
-				// bottom left
-				if (x < counts.length - 1 && y < counts.length - 1 && counts[x - 1][y + 1] == MINE) {
-					neighborCount++;
-				}
-				// bottom center
-				if (y < counts.length - 1 && counts[x][y + 1] == MINE) {
-					neighborCount++;
-				}
-				// bottom right
-				if (x < counts.length - 1 && y < counts.length - 1 && counts[x + 1][y + 1] == MINE) {
-					neighborCount++;
+				if (counts[x][y] != MINE) {
+					int neighborCount = 0;
+					// top left tile
+					if (x > 0 && y > 0 && counts[x - 1][y - 1] == MINE) {
+						neighborCount++;
+					}
+					// top center
+					if (y > 0 && counts[x][y - 1] == MINE) {
+						neighborCount++;
+					}
+					// top right
+					if (x < counts.length - 1 && y > 0 && counts[x + 1][y - 1] == MINE) {
+						neighborCount++;
+					}
+					// center left
+					if (x > 0 && counts[x - 1][y] == MINE) {
+						neighborCount++;
+					}
+					// center right
+					if (x < counts.length - 1 && counts[x + 1][y] == MINE) {
+						neighborCount++;
+					}
+					// bottom left
+					if (x > 0 && y < counts.length - 1 && counts[x - 1][y + 1] == MINE) {
+						neighborCount++;
+					}
+					// bottom center
+					if (y < counts.length - 1 && counts[x][y + 1] == MINE) {
+						neighborCount++;
+					}
+					// bottom right
+					if (x < counts.length - 1 && y < counts.length - 1 && counts[x + 1][y + 1] == MINE) {
+						neighborCount++;
+					}
+					counts[x][y] = neighborCount;
 				}
 			}
 		}
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource().equals(reset)) {
+			// reset the mine field
+		} else {
+			for (int x = 0; x < buttons.length; x++) {
+				for (int y = 0; y < buttons.length; y++) {
+					if (event.getSource() == buttons[x][y]) {
+						buttons[x][y].setText(counts[x][y] + "");
+						buttons[x][y].setEnabled(false);
+					}
+				}
+			}
+		}
 	}
 
 }
